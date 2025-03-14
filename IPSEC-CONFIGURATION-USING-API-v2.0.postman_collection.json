@@ -1,0 +1,954 @@
+{
+	"info": {
+		"_postman_id": "453b3a12-75c5-40ed-abdd-570225071ba1",
+		"name": "IPSEC-CONFIGURATION-USING-API-v2.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31871330"
+	},
+	"item": [
+		{
+			"name": "CREATE-MGMT-PROFILE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"entry\": [\r\n            {\r\n                \"@name\": \"{{mgmt-profile-name}}\",\r\n                \"ping\": \"yes\",\r\n                \"https\": \"no\"\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/InterfaceManagementNetworkProfiles?name={{mgmt-profile-name}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"InterfaceManagementNetworkProfiles"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{mgmt-profile-name}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE-ETHERNET-INTERFACES",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"entry\": [\r\n            {\r\n                \"@name\": \"{{PHYSICAL-INTERFACE-NAME}}\",\r\n                \"layer3\": {\r\n                    \"ndp-proxy\": {\r\n                        \"enabled\": \"no\"\r\n                    },\r\n                    \"ip\": {\r\n                        \"entry\": [\r\n                            {\r\n                                \"@name\": \"{{PHYSICAL-INTERFACE-IP}}\"\r\n                            }\r\n                        ]\r\n                    },\r\n                    \"interface-management-profile\": \"{{mgmt-profile-name}}\",\r\n                    \"lldp\": {\r\n                        \"enable\": \"no\"\r\n                    }\r\n                }\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/ethernetinterfaces?name={{PHYSICAL-INTERFACE-NAME}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"ethernetinterfaces"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{PHYSICAL-INTERFACE-NAME}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE-TUNNEL-INTERFACE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"entry\": [\r\n            {\r\n                \"@name\": \"{{tunnel-interface-name}}\",\r\n                \"ip\": {\r\n                    \"entry\": [\r\n                        {\r\n                            \"@name\": \"{{tunnel-interface-ip}}\"\r\n                        }\r\n                    ]\r\n                }\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/tunnelinterfaces?name={{tunnel-interface-name}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"tunnelinterfaces"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{tunnel-interface-name}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE-SECURITY-ZONE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"entry\": {\r\n        \"@name\": \"{{SECURITY-ZONE}}\",\r\n        \"enable-user-identification\": \"no\",\r\n        \"network\": {\r\n            \"layer3\": {\r\n                \"member\": [\r\n                    \"{{PHYSICAL-INTERFACE-NAME}}\",\r\n                    \"{{tunnel-interface-name}}\"\r\n                ]\r\n            }\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/zones?location=vsys&vsys=vsys1&name={{SECURITY-ZONE}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"zones"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "vsys"
+						},
+						{
+							"key": "vsys",
+							"value": "vsys1"
+						},
+						{
+							"key": "name",
+							"value": "{{SECURITY-ZONE}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE-IKE-CRYPTO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"entry\": [\r\n            {\r\n                \"@name\": \"{{IKE-CRYPTO}}\",\r\n                \"hash\": {\r\n                    \"member\": [\r\n                        \"non-auth\"\r\n                    ]\r\n                },\r\n                \"dh-group\": {\r\n                    \"member\": [\r\n                        \"group20\"\r\n                    ]\r\n                },\r\n                \"encryption\": {\r\n                    \"member\": [\r\n                        \"aes-256-gcm\"\r\n                    ]\r\n                },\r\n                \"lifetime\": {\r\n                    \"hours\": \"8\"\r\n                }\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/IKECryptoNetworkProfiles?name={{IKE-CRYPTO}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"IKECryptoNetworkProfiles"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{IKE-CRYPTO}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE-IPSEC-CRYPTO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"entry\": [\r\n            {\r\n                \"@name\": \"{{IPSEC-CRYPTO}}\",\r\n                \"esp\": {\r\n                    \"authentication\": {\r\n                        \"member\": [\r\n                            \"sha512\"\r\n                        ]\r\n                    },\r\n                    \"encryption\": {\r\n                        \"member\": [\r\n                            \"aes-256-gcm\"\r\n                        ]\r\n                    }\r\n                },\r\n                \"lifetime\": {\r\n                    \"hours\": \"24\"\r\n                },\r\n                \"dh-group\": \"group21\"\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/IPseccryptoNetworkProfiles?name={{IPSEC-CRYPTO}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"IPseccryptoNetworkProfiles"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{IPSEC-CRYPTO}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE-IKE-GATEWAY",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"entry\": [\r\n            {\r\n                \"@name\": \"{{IKE-GW-NAME}}\",\r\n                \"protocol\": {\r\n                    \"ikev2\": {\r\n                        \"pq-ppk\": {\r\n                            \"enabled\": \"no\",\r\n                            \"negotiation-mode\": \"preferred\"\r\n                        },\r\n                        \"dpd\": {\r\n                            \"enable\": \"yes\"\r\n                        },\r\n                        \"ike-crypto-profile\": \"{{IKE-CRYPTO}}\"\r\n                    },\r\n                    \"ikev1\": {\r\n                        \"dpd\": {\r\n                            \"enable\": \"no\"\r\n                        },\r\n                        \"ike-crypto-profile\": \"{{IKE-CRYPTO}}\"\r\n                    },\r\n                    \"version\": \"ikev2\"\r\n                },\r\n                \"authentication\": {\r\n                    \"pre-shared-key\": {\r\n                        \"key\": \"{{pre-shared-key}}\"\r\n                    }\r\n                },\r\n                \"local-address\": {\r\n                    \"ip\": \"{{PHYSICAL-INTERFACE-IP}}\",\r\n                    \"interface\": \"{{PHYSICAL-INTERFACE-NAME}}\"\r\n                },\r\n                \"protocol-common\": {\r\n                    \"nat-traversal\": {\r\n                        \"enable\": \"no\"\r\n                    },\r\n                    \"fragmentation\": {\r\n                        \"enable\": \"no\"\r\n                    },\r\n                    \"passive-mode\": \"yes\"\r\n                },\r\n                \"peer-address\": {\r\n                    \"ip\": \"{{PEER-IP}}\"\r\n                }\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/IKEGatewayNetworkProfiles?name={{IKE-GW-NAME}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"IKEGatewayNetworkProfiles"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{IKE-GW-NAME}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE-IPSEC-GATEWAY",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"entry\": [\r\n            {\r\n                \"@name\": \"{{IPSEC-GW-NAME}}\",\r\n                \"auto-key\": {\r\n                    \"ike-gateway\": {\r\n                        \"entry\": [\r\n                            {\r\n                                \"@name\": \"{{IKE-GW-NAME}}\"\r\n                            }\r\n                        ]\r\n                    },\r\n                    \"ipsec-crypto-profile\": \"{{IPSEC-CRYPTO}}\"\r\n                },\r\n                \"tunnel-monitor\": {\r\n                    \"enable\": \"no\"\r\n                },\r\n                \"tunnel-interface\": \"{{tunnel-interface-name}}\"\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/IPSecTunnels?name={{IPSEC-GW-NAME}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"IPSecTunnels"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{IPSEC-GW-NAME}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MODIFY-VR",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"entry\": [\r\n            {\r\n                \"@name\": \"{{VR-NAME}}\",\r\n                \"routing-table\": {\r\n                    \"ip\": {\r\n                        \"static-route\": {\r\n                            \"entry\": [\r\n                                {\r\n                                    \"@name\": \"route-2-tunnel\",\r\n                                    \"bfd\": {\r\n                                        \"profile\": \"None\"\r\n                                    },\r\n                                    \"interface\": \"{{tunnel-interface-name}}\",\r\n                                    \"metric\": \"10\",\r\n                                    \"destination\": \"{{STATIC-ROUTE-TUNNEL}}\",\r\n                                    \"route-table\": {\r\n                                        \"unicast\": {}\r\n                                    }\r\n                                },\r\n                                {\r\n                                    \"@name\": \"{{ROUTE-2-PRIVATE-SUBNET-NAME}}\",\r\n                                    \"bfd\": {\r\n                                        \"profile\": \"None\"\r\n                                    },\r\n                                    \"interface\": \"{{tunnel-interface-name}}\",\r\n                                    \"metric\": \"10\",\r\n                                    \"destination\": \"{{PRIVATE-SUBNET-VIA-TUNNEL}}\",\r\n                                    \"route-table\": {\r\n                                        \"unicast\": {}\r\n                                    }\r\n                                }\r\n                            ]\r\n                        }\r\n                    }\r\n                },\r\n                \"admin-dists\": {\r\n                    \"static\": \"10\"\r\n                },\r\n                \"interface\": {\r\n                    \"member\": [\r\n                        \"{{PHYSICAL-INTERFACE-NAME}}\",\r\n                        \"{{tunnel-interface-name}}\"\r\n                    ]\r\n                },\r\n                \"ecmp\": {\r\n                    \"algorithm\": {\r\n                        \"ip-modulo\": {}\r\n                    }\r\n                },\r\n                \"protocol\": {\r\n                    \"bgp\": {\r\n                        \"routing-options\": {\r\n                            \"graceful-restart\": {\r\n                                \"enable\": \"yes\"\r\n                            }\r\n                        },\r\n                        \"enable\": \"no\"\r\n                    },\r\n                    \"rip\": {\r\n                        \"enable\": \"no\"\r\n                    },\r\n                    \"ospf\": {\r\n                        \"enable\": \"no\"\r\n                    },\r\n                    \"ospfv3\": {\r\n                        \"enable\": \"no\"\r\n                    }\r\n                }\r\n            }\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/VirtualRouters?name={{VR-NAME}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"VirtualRouters"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{VR-NAME}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE-POLICY",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n          \"entry\": [\r\n            {\r\n                \"@name\": \"{{IPSEC-POLICY-NAME}}\",\r\n                \"@location\": \"vsys\",\r\n                \"@vsys\": \"vsys1\",\r\n                \"to\": {\r\n                    \"member\": [\r\n                        \"{{SECURITY-ZONE}}\"\r\n                    ]\r\n                },\r\n                \"from\": {\r\n                    \"member\": [\r\n                        \"{{SECURITY-ZONE}}\"\r\n                    ]\r\n                },\r\n                \"source\": {\r\n                    \"member\": [\r\n                        \"any\"\r\n                    ]\r\n                },\r\n                \"destination\": {\r\n                    \"member\": [\r\n                        \"any\"\r\n                    ]\r\n                },\r\n                \"source-user\": {\r\n                    \"member\": [\r\n                        \"any\"\r\n                    ]\r\n                },\r\n                \"category\": {\r\n                    \"member\": [\r\n                        \"any\"\r\n                    ]\r\n                },\r\n                \"application\": {\r\n                    \"member\": [\r\n                        \"ipsec\",\r\n                        \"ping\"\r\n                    ]\r\n                },\r\n                \"service\": {\r\n                    \"member\": [\r\n                        \"application-default\"\r\n                    ]\r\n                },\r\n                \"source-hip\": {\r\n                    \"member\": [\r\n                        \"any\"\r\n                    ]\r\n                },\r\n                \"destination-hip\": {\r\n                    \"member\": [\r\n                        \"any\"\r\n                    ]\r\n                },\r\n                \"action\": \"allow\"\r\n            }\r\n        ]\r\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/Policies/SecurityRules?location=vsys&vsys=vsys1&name={{IPSEC-POLICY-NAME}}",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"Policies",
+						"SecurityRules"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "vsys"
+						},
+						{
+							"key": "vsys",
+							"value": "vsys1"
+						},
+						{
+							"key": "name",
+							"value": "{{IPSEC-POLICY-NAME}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-MGMT-PROFILE",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/InterfaceManagementNetworkProfiles?name=allow-ping",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"InterfaceManagementNetworkProfiles"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "allow-ping"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-ETHERNET-INTERFACES",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/ethernetinterfaces?name=ethernet1/1",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"ethernetinterfaces"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "ethernet1/1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-TUNNEL-INTERFACE",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/tunnelinterfaces?name=tunnel.1",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"tunnelinterfaces"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "tunnel.1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-SECURITY-ZONE",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/zones?location=vsys&vsys=vsys1&name=IPSEC",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"zones"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "vsys"
+						},
+						{
+							"key": "vsys",
+							"value": "vsys1"
+						},
+						{
+							"key": "name",
+							"value": "IPSEC"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-IKE-CRYPTO",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/IKECryptoNetworkProfiles?name=IKE-CRYPTO",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"IKECryptoNetworkProfiles"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "IKE-CRYPTO"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-IPSEC-CRYPTO",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/IPseccryptoNetworkProfiles?name=IPSEC-CRYPTO",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"IPseccryptoNetworkProfiles"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "IPSEC-CRYPTO"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-IKE-GATEWAY",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/IKEGatewayNetworkProfiles?name=IPSEC-TUNNEL-1",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"IKEGatewayNetworkProfiles"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "IPSEC-TUNNEL-1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-IPSEC-GATEWAY",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/IPSecTunnels?name=HANDMADE-TUNNEL",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"IPSecTunnels"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "HANDMADE-TUNNEL"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-VR",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/network/VirtualRouters?name=default",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"network",
+						"VirtualRouters"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "default"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-POLICY",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/restapi/v10.2/Policies/SecurityRules?location=vsys&vsys=vsys1&name=ALLOW-IPSEC",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"restapi",
+						"v10.2",
+						"Policies",
+						"SecurityRules"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "vsys"
+						},
+						{
+							"key": "vsys",
+							"value": "vsys1"
+						},
+						{
+							"key": "name",
+							"value": "ALLOW-IPSEC"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "COMMIT-CONFIG",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "LUFRPT0vMS9sTEN5bTk0WUVtZXNlZG9WWkhVUGdzYzg9MFNNYTI2OWVNaGpKblB0R1JLUjYxQmJVOStnTlZKbkZ2N21pWmtEcnpwdDdUUzdhTnA4TW41d2ZKTldyd3ZndA==",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-PAN-KEY",
+						"value": "{{X-PAN-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{ip}}/api/?type=commit&cmd=<commit></commit>",
+					"protocol": "https",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"api",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "commit"
+						},
+						{
+							"key": "cmd",
+							"value": "<commit></commit>"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ip",
+			"value": "10.194.40.205",
+			"type": "string"
+		},
+		{
+			"key": "key",
+			"value": "LUFRPT14RjNlOEg3cWkrbmdPYlkxOHMxWjJUYnE1K2s9MFNNYTI2OWVNaGpKblB0R1JLUjYxQmJVOStnTlZKbkZ2N21pWmtEcnpwc0txYzl1RVhnNEtLWDAyK05iZVJacg==",
+			"type": "string"
+		},
+		{
+			"key": "X-PAN-KEY",
+			"value": "LUFRPT14RjNlOEg3cWkrbmdPYlkxOHMxWjJUYnE1K2s9MFNNYTI2OWVNaGpKblB0R1JLUjYxQmJVOStnTlZKbkZ2N21pWmtEcnpwc0txYzl1RVhnNEtLWDAyK05iZVJacg==",
+			"type": "string"
+		},
+		{
+			"key": "PHYSICAL-INTERFACE-NAME",
+			"value": "ethernet1/1"
+		},
+		{
+			"key": "PHYSICAL-INTERFACE-IP",
+			"value": "192.168.1.1/32"
+		},
+		{
+			"key": "tunnel-interface-name",
+			"value": "tunnel.1"
+		},
+		{
+			"key": "tunnel-interface-ip",
+			"value": "1.1.1.1/32"
+		},
+		{
+			"key": "PEER-IP",
+			"value": "192.168.1.2"
+		},
+		{
+			"key": "IKE-GW-NAME",
+			"value": "IPSEC-TUNNEL-1"
+		},
+		{
+			"key": "SECURITY-ZONE",
+			"value": "IPSEC"
+		},
+		{
+			"key": "IKE-CRYPTO",
+			"value": "IKE-CRYPTO"
+		},
+		{
+			"key": "IPSEC-CRYPTO",
+			"value": "IPSEC-CRYPTO"
+		},
+		{
+			"key": "pre-shared-key",
+			"value": "paloalto"
+		},
+		{
+			"key": "STATIC-ROUTE-TUNNEL",
+			"value": "1.1.1.0/24"
+		},
+		{
+			"key": "ROUTE-2-PRIVATE-SUBNET-NAME",
+			"value": "route-2-172.16.0.0"
+		},
+		{
+			"key": "PRIVATE-SUBNET-VIA-TUNNEL",
+			"value": "172.16.0.0/16"
+		},
+		{
+			"key": "IPSEC-POLICY-NAME",
+			"value": "ALLOW-IPSEC"
+		},
+		{
+			"key": "mgmt-profile-name",
+			"value": "allow-ping-ipsec"
+		},
+		{
+			"key": "VR-NAME",
+			"value": "IPSEC-VR"
+		},
+		{
+			"key": "IPSEC-GW-NAME",
+			"value": "API-MADE-TUNNEL"
+		}
+	]
+}
